@@ -1,0 +1,80 @@
+program example													//主函数声明
+
+	var int1,int2:integer;										//变量声明
+		float1,float2,float3,float4:real;
+		ch1,ch2:char;
+		arr1:array[2..4]of array[1..3]of real;					//多为数组类型变量声明
+
+	const con1=150;												//常量定义
+		  con2=6.5;
+		  con3='z';	
+
+	type INT=integer;											//类型定义
+	type ARR=array[1..2]of array[2..3]of array[5..6]of integer;	//数组类型定义
+	var arr2:ARR;
+		int3:INT;												//使用自定义的类型名													
+	
+	type REC1=record											//结构体的声明
+				item1,item2:real;
+				item3:array [1..2] of array [1..3] of real ;	//结构体中嵌套数组
+			end;
+	type REC2=record
+				x,y:REC1;
+				z:char;
+			end;
+	var rec1:REC1;												//结构体变量定义
+		rec_arr:array[1..2]of array[1..2]of REC1;				//数组的类型为结构体
+		rec12 : REC2; 
+
+	function func (var f1 : integer;f2:real;f3:integer) : real	//子程序，带返回类型
+		var f4 : integer;										//子程序的变量定义
+		var f5 : real;
+		const f6=2;
+		procedure proc( p1:char; p2:real; p3:integer )			//过程函数的声明
+			var p4:char;										//过程函数的变量声明
+			begin
+				p4 := ch1;										//过程函数proc的语句
+				p1 := p4;
+				p2 := float1;
+				p3 := int2;
+			end;
+		begin													//子程序func的语句
+			arr1[2,3]:=float1 + 7.6;							//多维数组的使用（有类型匹配）
+			rec1.item3[2,3]:= arr1[3,int2];				//结构体中嵌套数组，类型匹配
+			f4:=1 + 3;
+			proc(ch1,f5,f4);									//过程函数的调用，参数的类型匹配和参数个数匹配
+		end;
+begin															//主函数的操作语句
+	if															//if语句
+	    2<1
+	then												
+	    begin
+		float1 := float1 + 1.1;
+	else
+		float1 := float1 + 2.2;
+    end;
+
+	while (int1+int2)>1												//while语句		
+		do begin
+			int1 := int1 - int2;
+		end;													//数组中嵌套结构体
+	
+	float1 := func(int1,3.4,1);				//过程函数的调用，参数的类型匹配和参数个数匹配，换名形参的限制，带返回值的类型匹配	
+	//float1 := func(int1,3,1);								//报错，参数类型不匹配
+	//float1 := func(5,3.4,1);								//报错，换名参数不可传入常数
+	
+	rec1.item3[2,3]:= arr1[3,int2];				
+	//rec1.item3[2,3]:= int1;								//数组，结构体的类型匹配（带嵌套）
+	//int1:= arr1[3,int2];
+	
+	float1 :=rec1.item3[1,2];
+	arr1[4,2]:=float1 + 7.6;
+	//arr1[5,2]:=float1 + 7.6;								//数组的越界检查
+
+	proc(ch2,float2,int1);									//过程函数的调用，参数只能为变量
+	//proc(ch2,1.3,int1);									//报错，过程函数参数不可传入常数
+	
+	int1 := 5;;;												//体现优化环节
+	float1 := 1.2*3.15 /(float4 + float3);
+	float2 := 1.2*3.15 /(float4 + float3)*(float4 - float3);;;
+end.														//结束
